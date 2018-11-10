@@ -15,8 +15,8 @@ class Server {
         struct sockaddr_in server;
         struct sockaddr_in client;
         int _socket;
-        int addr_length; //c
-        int _accept; //client_sock
+        int addr_length;
+        int _accept; 
         char message[5000];
         int port;
         void send_message(int);
@@ -34,7 +34,7 @@ int Server::make_socket(int argc, char* argv[])
 
     _socket = socket(AF_INET, SOCK_STREAM, 0);
     if (_socket == -1){
-        perror( "error: problem with makeing socket"); // must be perror
+        perror( "error: problem with makeing socket"); 
         return 0;
     }
 
@@ -45,7 +45,7 @@ int Server::make_socket(int argc, char* argv[])
     server.sin_family = AF_INET;
 
     if (bind(_socket, (struct sockaddr*)&server, sizeof(server)) < 0){
-        perror("error: problem with binding"); //must be perror()
+        perror("error: problem with binding"); 
         close(_socket);
         return 0;
     }
@@ -55,18 +55,17 @@ int Server::make_socket(int argc, char* argv[])
         return 0;
     }
 
-    puts( "waiting for incoming connections...."); //must be puts()
+    puts( "waiting for incoming connections...."); 
     
     addr_length = sizeof(struct sockaddr_in);
 
     _accept = accept(_socket, (struct sockaddr*)&client, (socklen_t*)&addr_length);
 
     if (addr_length < 0){
-        perror("error: problem with accepting"); //must be perror
+        perror("error: problem with accepting"); 
         close(_socket);
     }
 
-///////////////////////stex e error@////////////////
 
     std::thread t1(&Server::send_message, this, _accept);
     std::thread t2(&Server::receive_message, this, _accept);
